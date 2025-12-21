@@ -1,13 +1,15 @@
 import {useState, useRef} from "react";
 import { parseJSON } from "../utils/parseJSON";
+import type { dataSnapshot } from "../types";
 
 interface InputFieldProps {
     label: string;
     placeholder?: string;
     type?: string;
+    onParsed: (data: dataSnapshot) => void;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, placeholder = "", type = "application/json" }) => {
+const InputField: React.FC<InputFieldProps> = ({ label, placeholder = "", type = "application/json", onParsed }) => {
     const [fileName, setFilename] = useState<string>("");
     const [warn, setWarn] = useState<boolean>(false);
     const inputRef = useRef<null | HTMLInputElement>(null);
@@ -20,7 +22,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, placeholder = "", type =
             setFilename(file.name);
 
             // Parse JSON File
-            if (file) parseJSON(file);
+            parseJSON({jsonFile: file, onParsed});
         } else {
             setFilename("");
             if (file && file.name !== "") setWarn(true);

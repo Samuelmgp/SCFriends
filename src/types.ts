@@ -1,14 +1,14 @@
 export type Friend = {
     username: string;
     displayName: string;
-    dateAdded: Date;
-    dateChanged?: Date;
-    source?: string;
+    dateAdded: string;
+    dateChanged?: string | "Unchanged";
+    source?: string | "Unknown";
 }
 
 export type dataSnapshot = {
     name: string;
-    created: Date;
+    created: string;
     Friends: Friend[];
     Blocked: Friend[];
     Deleted: Friend[];

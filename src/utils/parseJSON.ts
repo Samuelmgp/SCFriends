@@ -1,19 +1,26 @@
-import type { dataSnapshot, Friend } from '../types';
+import type { dataSnapshot } from "../types";
+import { toSnapshot } from "./parseFriends";
 
-export function parseJSON(jsonFile: File): dataSnapshot | null {
+type props = {
+    jsonFile: File;
+    onParsed: (data: dataSnapshot) => void;
+}
+
+export function parseJSON({jsonFile, onParsed}: props): void{
     const reader = new FileReader();
     
     reader.onload = () => {
         try {
-            console.log(reader.result);
             const parsed = JSON.parse(reader.result as string);
+        
+            const dataSnapshot: dataSnapshot = toSnapshot(jsonFile.name, parsed);
 
-            return parsed;
+            onParsed(dataSnapshot);
         }catch (error) {
             console.warn('Could not parse: ', error);
+            return {name: "Unaccessible", created: "Unknown", Friends: [], Blocked: [], Deleted: [], Pending: []} as dataSnapshot;
         }
     }
 
     reader.readAsText(jsonFile);
-    return null;
 };
