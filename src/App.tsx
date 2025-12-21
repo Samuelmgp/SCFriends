@@ -13,16 +13,16 @@ function App() {
   function handleOnParsed(data: dataSnapshot): void {
     console.log("Parsed Data: ", data);
     setParsedData(data);
-    setDisplaying(data.Friends);
+    setDisplaying(data.all);
   }
 
   function handleSearch(term: string): void {
     if (parsedData) {
       if (term.trim() === "") {
-        setDisplaying(parsedData.Friends);
+        setDisplaying(parsedData.all);
         return;
       }else {
-        search(term, parsedData.Friends, setDisplaying);
+        search(term, parsedData.all, setDisplaying);
         console.log("Search Term: ", term);
       }
     }

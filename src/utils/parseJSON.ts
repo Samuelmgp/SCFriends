@@ -18,7 +18,7 @@ export function parseJSON({jsonFile, onParsed}: props): void{
             onParsed(dataSnapshot);
         }catch (error) {
             console.warn('Could not parse: ', error);
-            return {name: "Unaccessible", created: "Unknown", Friends: [], Blocked: [], Deleted: [], Pending: []} as dataSnapshot;
+            return {name: "Unaccessible", created: "Unknown", all: [], Friends: [], Blocked: [], Deleted: [], Pending: []} as dataSnapshot;
         }
     }
 

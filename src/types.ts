@@ -1,4 +1,5 @@
 export type Friend = {
+    status: string | "gray";
     username: string;
     displayName: string;
     dateAdded: string;
@@ -9,14 +10,9 @@ export type Friend = {
 export type dataSnapshot = {
     name: string;
     created: string;
+    all: Friend[];
     Friends: Friend[];
     Blocked: Friend[];
     Deleted: Friend[];
     Pending: Friend[];
-}
-
-export type testSnapshot = {
-    id: string;
-    name: string;
-    date: string;
 }
