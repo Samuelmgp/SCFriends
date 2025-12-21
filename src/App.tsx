@@ -2,16 +2,31 @@ import { useState } from "react"
 import InputField from "./components/JSONInputField"
 import type { dataSnapshot, Friend } from "./types";
 import FriendItem from "./components/FriendItem";
+import SearchBar from "./components/SearchBar";
+import search from "./utils/search";
 
 
 function App() { 
   const [parsedData, setParsedData] = useState<dataSnapshot | null>(null);
+  const [displaying, setDisplaying] = useState<Friend[]>([]);
 
-  function handleOnParsed(data: dataSnapshot) {
+  function handleOnParsed(data: dataSnapshot): void {
     console.log("Parsed Data: ", data);
     setParsedData(data);
+    setDisplaying(data.Friends);
   }
 
+  function handleSearch(term: string): void {
+    if (parsedData) {
+      if (term.trim() === "") {
+        setDisplaying(parsedData.Friends);
+        return;
+      }else {
+        search(term, parsedData.Friends, setDisplaying);
+        console.log("Search Term: ", term);
+      }
+    }
+  }
 
   return (
     <>
@@ -27,9 +42,11 @@ function App() {
         <h2 className="text-lg font-bold">File Upload:</h2>
         <InputField label="Select File" type="file" onParsed={handleOnParsed}/>
       </div>
+      
+      <SearchBar onSearch={handleSearch} />
 
       <div id="Friends-Container" className="mx-5 mt-10">
-        <table className="min-w-full border-collapse block md:table">
+        <table className="min-w-full border-separate border-spacing-y-2 block md:table">
           <thead className="block md:table-header-group">
             <tr className="border border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative ">
               <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Username</th>
@@ -40,7 +57,7 @@ function App() {
             </tr>
           </thead>
           <tbody className="block md:table-row-group">
-            {parsedData !== null && parsedData.Friends.map((friend: Friend, index: number) => (<FriendItem key={index} friend={friend} />))}
+            {displaying !== null && displaying.map((friend: Friend, index: number) => (<FriendItem key={index} friend={friend} />))}
           </tbody>
         </table>
       </div>
