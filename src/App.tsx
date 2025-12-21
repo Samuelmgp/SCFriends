@@ -1,32 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from "react"
+import InputField from "./components/JSONInputField"
+import type { dataSnapshot, Friend } from "./types";
+import FriendItem from "./components/FriendItem";
+import SearchBar from "./components/SearchBar";
+import search from "./utils/search";
 
-function App() {
-  const [count, setCount] = useState(0)
+
+function App() { 
+  const [parsedData, setParsedData] = useState<dataSnapshot | null>(null);
+  const [displaying, setDisplaying] = useState<Friend[]>([]);
+
+  function handleOnParsed(data: dataSnapshot): void {
+    console.log("Parsed Data: ", data);
+    setParsedData(data);
+    setDisplaying(data.all);
+  }
+
+  function handleSearch(term: string): void {
+    if (parsedData) {
+      if (term.trim() === "") {
+        setDisplaying(parsedData.all);
+        return;
+      }else {
+        search(term, parsedData.all, setDisplaying);
+        console.log("Search Term: ", term);
+      }
+    }
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+      <div className="ms-5 mt-10">
+        <h1 className="text-5xl font-bold">Snapchat Friends</h1>
+        <p className="mt-2 text-gray-600">
+          Easily search through your Snapchat friends by username or display name. <br />
+          You can also filter based on date added and friendship status.
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <div className="flex items-center gap-2 mt-10 mx-5">
+        <h2 className="text-lg font-bold">File Upload:</h2>
+        <InputField label="Select File" type="file" onParsed={handleOnParsed}/>
+      </div>
+      
+      <SearchBar onSearch={handleSearch} />
+
+      <div id="Friends-Container" className="mx-5 mt-10">
+        <table className="min-w-full border-separate border-spacing-y-2 block md:table">
+          <thead className="block md:table-header-group">
+            <tr className="border border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative ">
+              <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Username</th>
+              <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Display Name</th>
+              <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Date Added</th>
+              <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Date Changed</th>
+              <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Source</th>
+            </tr>
+          </thead>
+          <tbody className="block md:table-row-group">
+            {displaying !== null && displaying.map((friend: Friend, index: number) => (<FriendItem key={index} friend={friend} />))}
+          </tbody>
+        </table>
+      </div>
     </>
   )
 }
