@@ -1,9 +1,17 @@
+/* React & Types & Enums Imports */
 import { useState } from "react"
-import InputField from "./components/JSONInputField"
 import type { dataSnapshot, Friend } from "./types";
+
+/* Utilities Imports */
+import search from "./utils/search";
+
+/* Components Imports */
+import InputField from "./components/JSONInputField"
 import FriendItem from "./components/FriendItem";
 import SearchBar from "./components/SearchBar";
-import search from "./utils/search";
+import ViewSelectedField from "./components/ViewSelectedField";
+
+
 
 
 function App() { 
@@ -20,12 +28,15 @@ function App() {
     if (parsedData) {
       if (term.trim() === "") {
         setDisplaying(parsedData.all);
-        return;
       }else {
         search(term, parsedData.all, setDisplaying);
         console.log("Search Term: ", term);
       }
     }
+  }
+
+  function handleUpdatedSelections(value: string, selected: boolean){
+    
   }
 
   return (
@@ -45,12 +56,14 @@ function App() {
       
       <SearchBar onSearch={handleSearch} />
 
+      <ViewSelectedField onSelected={handleUpdatedSelections}/>
+
       <div id="Friends-Container" className="mx-5 mt-10">
         <table className="min-w-full border-separate border-spacing-y-2 block md:table">
           <thead className="block md:table-header-group">
             <tr className="border border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative ">
+              <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Name</th>
               <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Username</th>
-              <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Display Name</th>
               <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Date Added</th>
               <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Date Changed</th>
               <th className="bg-gray-200 p-2 text-gray-600 font-bold md:border md:border-gray-300 text-left block md:table-cell">Source</th>

@@ -16,10 +16,10 @@ export function toSnapshot(fileName: string, raw: any): dataSnapshot {
         ...toFriend(friend, "green")
     }));
     const blockedList: Friend[] = (raw["Blocked Users"] || []).map((friend: any) => ({
-        ...toFriend(friend, "orange")
+        ...toFriend(friend, "red")
     }));
     const removedList: Friend[] = (raw["Deleted Friends"] || []).map((friend: any) => ({
-        ...toFriend(friend, "red")
+        ...toFriend(friend, "orange")
     }));
     const pendingList: Friend[] = (raw["Pending Requests"] || []).map((friend: any) => ({
         ...toFriend(friend, "gray")
