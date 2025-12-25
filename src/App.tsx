@@ -50,8 +50,14 @@ function App() {
       <SearchBar onSearch={handleSearch} />
 
       <ViewSelectedField onSelected={handleUpdatedSelections}/>
-
-      <div id="Friends-Container" className="mx-5 mt-10">
+      <div>
+        {displaying !== null && displaying.length > 0 ? (
+          <p className="mx-5 mt-5 text-gray-600">Displaying: {displaying.length} results</p>
+        ) : (
+          <p className="mx-5 mt-5 text-gray-600">Nothing to display. Please upload a file and/or adjust your search criteria.</p>
+        )}
+      </div>
+      <div id="Friends-Container" className="mx-5 mt-5 overflow-x-auto">
         <table className="min-w-full border-separate border-spacing-y-2 block md:table">
           <thead className="block md:table-header-group">
             <tr className="border border-gray-300 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative ">
