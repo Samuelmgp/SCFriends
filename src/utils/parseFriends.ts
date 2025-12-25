@@ -3,7 +3,7 @@ import type { dataSnapshot, Friend } from "../types";
 function toFriend(raw: any, status: string): Friend {
     return {
         username: raw.username || raw.Username || raw.userName || "",
-        status: status || "gray",
+        status: status || "bg-gray-300",
         displayName: raw.displayName || raw["Display Name"] || raw.display_name || "",
         dateAdded: raw.dateAdded || raw["Creation Timestamp"] || "",
         dateChanged: raw.dateChanged || raw["Last Modified Timestamp"] || "Unchanged",
@@ -13,16 +13,16 @@ function toFriend(raw: any, status: string): Friend {
 
 export function toSnapshot(fileName: string, raw: any): dataSnapshot {
     const friendsList: Friend[] = (raw["Friends"] || []).map((friend: any) => ({
-        ...toFriend(friend, "green")
+        ...toFriend(friend, "bg-green-300")
     }));
     const blockedList: Friend[] = (raw["Blocked Users"] || []).map((friend: any) => ({
-        ...toFriend(friend, "red")
+        ...toFriend(friend, "bg-red-300")
     }));
     const removedList: Friend[] = (raw["Deleted Friends"] || []).map((friend: any) => ({
-        ...toFriend(friend, "orange")
+        ...toFriend(friend, "bg-orange-300")
     }));
     const pendingList: Friend[] = (raw["Pending Requests"] || []).map((friend: any) => ({
-        ...toFriend(friend, "gray")
+        ...toFriend(friend, "bg-gray-300")
     }));
 
     const date = new Date();

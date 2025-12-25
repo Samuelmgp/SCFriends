@@ -3,7 +3,8 @@ import { useState } from "react"
 import type { dataSnapshot, Friend } from "./types";
 
 /* Utilities Imports */
-import search from "./utils/search";
+import { search, updateSelectGroup } from "./utils/search";
+import search_init from "./utils/search";
 
 /* Components Imports */
 import InputField from "./components/JSONInputField"
@@ -15,28 +16,20 @@ import ViewSelectedField from "./components/ViewSelectedField";
 
 
 function App() { 
-  const [parsedData, setParsedData] = useState<dataSnapshot | null>(null);
   const [displaying, setDisplaying] = useState<Friend[]>([]);
 
   function handleOnParsed(data: dataSnapshot): void {
     console.log("Parsed Data: ", data);
-    setParsedData(data);
-    setDisplaying(data.all);
+    const display = search_init(data);
+    setDisplaying(display);
   }
 
   function handleSearch(term: string): void {
-    if (parsedData) {
-      if (term.trim() === "") {
-        setDisplaying(parsedData.all);
-      }else {
-        search(term, parsedData.all, setDisplaying);
-        console.log("Search Term: ", term);
-      }
-    }
+    search(term, setDisplaying)
   }
 
-  function handleUpdatedSelections(value: string, selected: boolean){
-    
+  function handleUpdatedSelections(enum_key: string, value: boolean): void{
+    updateSelectGroup(enum_key, value, setDisplaying);
   }
 
   return (
