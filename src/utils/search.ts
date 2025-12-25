@@ -12,17 +12,21 @@ let selectPending= true;
 let search_term: string = "";
 
 function filterByGroup(): Friend[]{
-    if (selectFriends && selectBlocked && selectRemoved && selectPending && parsedJSON){display = parsedJSON.all; return parsedJSON.all;}
+    display = [];
+    console.log("Filtering by group with settings:", {selectFriends, selectBlocked, selectRemoved, selectPending}, "search:", search_term, "parseData not null:", parsedJSON !== null);
+    if (selectFriends && selectBlocked && selectRemoved && selectPending && parsedJSON && search_term === ""){display = parsedJSON.all; return parsedJSON.all;}
     if (selectFriends && parsedJSON) display = [...display, ...parsedJSON.Friends];
     if (selectBlocked && parsedJSON) display = [...display, ...parsedJSON.Blocked];
     if (selectRemoved && parsedJSON) display = [...display, ...parsedJSON.Deleted];
     if (selectPending && parsedJSON) display = [...display, ...parsedJSON.Pending];
     if (search_term !== ""){
+        console.log("Filtering with search term:", search_term, display);
         return display.filter(friend => 
             friend.displayName.toLowerCase().includes(search_term) ||
             friend.username.toLowerCase().includes(search_term)
         );
     }
+    console.log("Display:", display);
     return display;
 }
 
